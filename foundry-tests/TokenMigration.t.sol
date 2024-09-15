@@ -28,10 +28,14 @@ contract TokenMigrationTest is Test {
         vm.startPrank(MOCK_USER);
         deal(OLD_USDT, MOCK_USER, 10000 ether);
 
+        uint256 oldUsdtBalanceBefore = IERC20(OLD_USDT).balanceOf(address(this));
+        uint256 newUsdtBalanceBefore = testUSDT.balanceOf(MOCK_USER);
+
         IERC20(OLD_USDT).approve(address(migration), 100 ether);
         migration.migrate(100 ether);
 
-        assertEq(testUSDT.balanceOf(MOCK_USER), 100 ether);
+        assertEq(testUSDT.balanceOf(MOCK_USER) - newUsdtBalanceBefore, 100 ether);
+        assertEq(IERC20(OLD_USDT).balanceOf(address(this)) - oldUsdtBalanceBefore, 100 ether);
         vm.stopPrank();
     }
 
