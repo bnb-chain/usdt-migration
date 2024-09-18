@@ -10,15 +10,15 @@ contract TokenMigration is Ownable2Step {
     using SafeERC20 for IERC20;
 
     /* ---------------------- immutable constants ----------------------*/
-    address public immutable MIGRATION_MULTI_SIG_WALLET;
+    address public immutable LP_PROVIDER;
     IERC20 public immutable OLD_USDT;
     IERC20 public immutable NEW_USDT;
 
-    constructor(address _migrationWallet, address _oldUSDT, address _newUSDT) Ownable(_migrationWallet) {
-        require(_migrationWallet != address(0) && _oldUSDT != address(0) && _newUSDT != address(0), "zero address");
+    constructor(address _migrationLpProvider, address _oldUSDT, address _newUSDT) Ownable(_migrationLpProvider) {
+        require(_migrationLpProvider != address(0) && _oldUSDT != address(0) && _newUSDT != address(0), "zero address");
         require(_oldUSDT != _newUSDT, "same USDT");
 
-        MIGRATION_MULTI_SIG_WALLET = _migrationWallet;
+        LP_PROVIDER = _migrationLpProvider;
         OLD_USDT = IERC20(_oldUSDT);
         NEW_USDT = IERC20(_newUSDT);
     }
@@ -35,9 +35,9 @@ contract TokenMigration is Ownable2Step {
     function migrate(uint256 _amount) external {
         require(_amount > 0, "zero amount");
         require(OLD_USDT.allowance(msg.sender, address(this)) >= _amount, "OLD_USDT not approved");
-        require(NEW_USDT.allowance(MIGRATION_MULTI_SIG_WALLET, address(this)) >= _amount, "NEW_USDT not approved");
+        require(NEW_USDT.allowance(LP_PROVIDER, address(this)) >= _amount, "NEW_USDT not approved");
 
-        OLD_USDT.safeTransferFrom(msg.sender, MIGRATION_MULTI_SIG_WALLET, _amount);
-        NEW_USDT.safeTransferFrom(MIGRATION_MULTI_SIG_WALLET, msg.sender, _amount);
+        OLD_USDT.safeTransferFrom(msg.sender, LP_PROVIDER, _amount);
+        NEW_USDT.safeTransferFrom(LP_PROVIDER, msg.sender, _amount);
     }
 }
