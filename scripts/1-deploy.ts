@@ -6,24 +6,27 @@ const log = console.log
 const contractName = 'TokenMigration';
 
 // TODO
-let MIGRATION_MULTI_SIG_WALLET = '';
-const OLD_USDT = '0x55d398326f99059fF775485246999027B3197955';
+let LP_PROVIDER = '';
 // TODO
-const NEW_USDT = '0x5092FD6ce0c5050622f829b6125E7dF5E53A6832';
+// const OLD_USDT = '0x55d398326f99059fF775485246999027B3197955';  // MAINNET
+const OLD_USDT = '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd'; // TESTNET
+// TODO
+// const NEW_USDT = ''; // MAINNET
+const NEW_USDT = '0x92C618b53e31a3eEc1D511556F48A2e06AF0F590'; // TESTNET
 
 const main = async () => {
     const { chainId } = await ethers.provider.getNetwork();
     const signers = await ethers.getSigners();
     const operator = signers[0];
-    if (!MIGRATION_MULTI_SIG_WALLET) {
-      MIGRATION_MULTI_SIG_WALLET = operator.address;
+    if (!LP_PROVIDER) {
+      LP_PROVIDER = operator.address;
     }
 
     const balance = await ethers.provider.getBalance(operator.address);
     log('operator.address: ', operator.address, toHuman(balance));
 
     const DeployArgs: string[] = [
-      MIGRATION_MULTI_SIG_WALLET,
+      LP_PROVIDER,
       OLD_USDT,
       NEW_USDT,
     ]
@@ -39,7 +42,7 @@ const main = async () => {
         TokenMigration: contractAddress,
 
         DeployArgs,
-        MIGRATION_MULTI_SIG_WALLET,
+        LP_PROVIDER,
         OLD_USDT,
         NEW_USDT,
 
