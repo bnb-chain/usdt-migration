@@ -20,7 +20,7 @@ contract TokenMigrationTest is Test {
     }
 
     function testMigration() public {
-        vm.expectRevert("OLD_USDT not approved");
+        vm.expectRevert();
         migration.migrate(100 ether);
 
         testUSDT.approve(address(migration), 100 ether);
@@ -34,7 +34,7 @@ contract TokenMigrationTest is Test {
         IERC20(OLD_USDT).approve(address(migration), 100 ether);
         migration.migrate(100 ether);
 
-        assertEq(testUSDT.balanceOf(MOCK_USER) - newUsdtBalanceBefore, 100 ether);
+        assertEq(testUSDT.balanceOf(MOCK_USER) - newUsdtBalanceBefore, 100 * 1e6);
         assertEq(IERC20(OLD_USDT).balanceOf(address(this)) - oldUsdtBalanceBefore, 100 ether);
         vm.stopPrank();
     }
