@@ -14,3 +14,10 @@ $ forge t
 ```
 
 ## Deployment
+```shell
+# set DEPLOYER_MNEMONIC to your MNEMONIC in .env
+# make sure you have enough tBNB in your wallet on BSC testnet
+$ npx hardhat run scripts/1-deploy.ts --network bsc-testnet 
+# check deployments/97-deployment.json
+
+```
