@@ -12,7 +12,7 @@ let LP_PROVIDER = '';
 const OLD_USDT = '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd'; // TESTNET
 // TODO
 // const NEW_USDT = ''; // MAINNET
-const NEW_USDT = '0x92C618b53e31a3eEc1D511556F48A2e06AF0F590'; // TESTNET
+const NEW_USDT = '0x22f1699Fc4A8760FE318D353DD11B6486577BbFb'; // TESTNET
 
 const main = async () => {
     const { chainId } = await ethers.provider.getNetwork();
